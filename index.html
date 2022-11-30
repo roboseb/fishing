@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='style.css'>
+    <title>Fishing</title>
+</head>
+
+<body>
+    <div id="main">
+        <h1>Fishing</h1>
+        <div id="water">
+            <div id="player"></div>
+            <svg id='line-box'>
+                <line id='pointer-line' x1="50%" y1="0%"/>
+            </svg>
+            <div id='spear'>
+                <div id="spear-hitbox"></div>
+            </div>
+            <div class="fish" data-caught='false'>fish</div>
+            <div class="fish fish-2" data-caught='false'>fish 2</div>
+            <div class="fish fish-3" data-caught='false'>fish 3</div>
+        </div>
+    </div>
+
+    <script src='script.js'></script>
+</body>
+
+</html>
