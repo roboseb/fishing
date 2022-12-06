@@ -1,3 +1,26 @@
+const fishList = {
+    common: {
+        color: 'red',
+        height: '1rem',
+        width: '5rem',
+        value: 2,
+    },
+
+    uncommon: {
+        color: 'blue',
+        height: '1.5rem',
+        width: '7rem',
+        value: 3,
+    },
+
+    rare: {
+        color: 'orange',
+        height: '2rem',
+        width: '8rem',
+        value: 10,
+    }
+}
+
 // Track pointer to mouse position on mouse enter.
 const water = document.getElementById('water');
 water.addEventListener('mousemove', (e) => {
@@ -5,12 +28,13 @@ water.addEventListener('mousemove', (e) => {
 });
 
 let thrown = false;
+let money = 20;
 
 // Fire a javelin on click.
 water.addEventListener('click', () => {
     const spear = document.querySelector('#spear');
 
-    if (!thrown) {
+    if (!thrown && money >= 5) {
         throwSpear(spear);
         thrown = true;
     } else {
@@ -19,8 +43,42 @@ water.addEventListener('click', () => {
     }
 });
 
+// Sell currently speared fish on right mouse button.
+water.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+
+    // Exit function unless spear is not currently thrown.
+    if (thrown) return;
+
+    const spear = document.getElementById('spear');
+    const fish = Array.from(spear.querySelectorAll('.fish'));
+
+    sellFish(fish);
+});
+
+// Sell all fish currently on spear.
+const sellFish = (fishes) => {
+    if (money < 5) return;
+    money -= 5;
+
+    fishes.forEach(fish => {
+        updateMoney(fish.dataset.value);
+    });
+
+    animateLostFish();
+}
+
+// Update money and displayed money amount.
+const updateMoney = (amount) => {
+    const moneyDisplay = document.getElementById('money');
+    money += parseInt(amount);
+    moneyDisplay.innerText = `Money: ${money}`;
+}
+
 // Throw the spear.
 const throwSpear = (spear) => {
+    if (money < 5) return;
+    updateMoney(-5);
     spear.style.top = '80%';
     spear.classList.add('thrown');
 }
@@ -153,7 +211,7 @@ let frameCounter = 0;
 // Function for containing functions to be called on every frame (60 times per second).
 const frameEffect = setInterval(() => {
     checkCollision();
-    generateFish(30);
+    generateFish(120);
     frameCounter++;
 }, 17);
 
@@ -177,19 +235,46 @@ const checkCollision = () => {
     });
 }
 
-let currentFish = 1;
+let fishCounter = 1;
 
 const generateFish = (interval) => {
     if (frameCounter % interval === 0 && frameCounter !== 0) {
 
-        const water = document.getElementById('water');
+        // Choose a random fish to generate.
+        const roll = Math.floor(Math.random() * 100);
+        let chosenFish;
+
+        if (roll > 50) {
+            chosenFish = 'common';
+        } else if (roll > 25) {
+            chosenFish = 'uncommon';
+        } else {
+            chosenFish = 'rare';
+        }   
+
+        const fishDetails = fishList[chosenFish];
+
+        // Customize fish and add it to the water.
+        const water = document.getElementById('fish-box');
         const fish = document.createElement('div');
-        fish.classList.add('fish', `fish-${currentFish}`);
+        fish.classList.add('fish', `fish-${fishCounter}`);
         fish.dataset.caught = 'false';
+        fish.dataset.value = fishDetails.value;
+
+        fish.style.left = '100%';
+        fish.style.bottom = `${roll}%`;
+        fish.style.backgroundColor = fishDetails.color;
+        fish.style.height = fishDetails.height;
+        fish.style.width = fishDetails.width;
 
         water.appendChild(fish);
 
-        currentFish++;
+        // Delete fish after animation is done.
+        setTimeout(() => {
+            if (fish) fish.remove();
+        }, 5000);
+
+        fishCounter++;
     }
 }
 
