@@ -1,21 +1,21 @@
 const fishList = {
     common: {
         color: 'red',
-        height: '1rem',
+        height: '4rem',
         width: '5rem',
         value: 2,
     },
 
     uncommon: {
         color: 'blue',
-        height: '1.5rem',
+        height: '6rem',
         width: '7rem',
         value: 3,
     },
 
     rare: {
-        color: 'orange',
-        height: '2rem',
+        color: 'green',
+        height: '8rem',
         width: '8rem',
         value: 10,
     }
@@ -58,8 +58,6 @@ water.addEventListener('contextmenu', (e) => {
 
 // Sell all fish currently on spear.
 const sellFish = (fishes) => {
-    if (money < 5) return;
-    money -= 5;
 
     fishes.forEach(fish => {
         updateMoney(fish.dataset.value);
@@ -256,16 +254,19 @@ const generateFish = (interval) => {
 
         // Customize fish and add it to the water.
         const water = document.getElementById('fish-box');
-        const fish = document.createElement('div');
+        const fish = document.createElement('img');
+
+        fish.src = `./images/fish-${fishDetails.color}.png`;
+        fish.draggable = 'false';
         fish.classList.add('fish', `fish-${fishCounter}`);
         fish.dataset.caught = 'false';
         fish.dataset.value = fishDetails.value;
 
         fish.style.left = '100%';
         fish.style.bottom = `${roll}%`;
-        fish.style.backgroundColor = fishDetails.color;
+        fish.style.backgroundColor = 'initial';
         fish.style.height = fishDetails.height;
-        fish.style.width = fishDetails.width;
+        fish.style.width = 'auto';
 
         water.appendChild(fish);
 

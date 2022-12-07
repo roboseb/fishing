@@ -39,6 +39,17 @@ h1 {
     transition: all 250ms;
 }
 
+#player>img {
+    height: 5rem;
+    width: auto;
+
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+
+    transform: translate(-50%, 0%);
+}
+
 #line-box {
     height: 100%;
     width: 100%;
